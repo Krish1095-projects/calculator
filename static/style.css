@@ -1,0 +1,90 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('/static/sciencelogo.png') no-repeat center center;
+    background-size: cover;
+    background-color: #222; /* Dark background color */
+    color: #fff; /* Text color */
+}
+
+.calculator {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+    border: 2px solid #444; /* Dark border */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Shadow effect */
+    text-align: center;
+    width: 300px;
+    padding: 20px;
+    z-index: 1; /* Ensure calculator is above background */
+    position: relative; /* Ensure proper stacking context */
+}
+
+.display {
+    font-size: 2em;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.5); /* Semi-transparent whiter background for display */
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: right;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.btn {
+    padding: 15px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    background: #333; /* Dark button background */
+    color: #fff; /* Button text color */
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.btn:hover {
+    background: #555; /* Darker background on hover */
+}
+
+.btn:active {
+    background: #222; /* Darker background on active */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Specific button styles */
+.btn.operation {
+    background: #666; /* Darker background for operation buttons */
+}
+
+.btn.operation:hover {
+    background: #888; /* Darker background on hover for operation buttons */
+}
+
+.btn.equal {
+    background: #2196f3; /* Blue background for equal button */
+}
+
+.btn.equal:hover {
+    background: #0d8bf5; /* Darker blue on hover for equal button */
+}
+
+.btn.clear {
+    background: #f44336; /* Red background for clear button */
+}
+
+.btn.clear:hover {
+    background: #e53935; /* Darker red on hover for clear button */
+}

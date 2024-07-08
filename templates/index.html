@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons basic">
+            <button class="btn clear" onclick="clearDisplay()">C</button>
+            <button class="btn" onclick="deleteLast()">DEL</button>
+            <button class="btn" onclick="toggleMode()">Sci</button>
+            <button class="btn operation" onclick="chooseOperation('divide')">/</button>
+            <button class="btn" onclick="appendNumber('7')">7</button>
+            <button class="btn" onclick="appendNumber('8')">8</button>
+            <button class="btn" onclick="appendNumber('9')">9</button>
+            <button class="btn operation" onclick="chooseOperation('multiply')">*</button>
+            <button class="btn" onclick="appendNumber('4')">4</button>
+            <button class="btn" onclick="appendNumber('5')">5</button>
+            <button class="btn" onclick="appendNumber('6')">6</button>
+            <button class="btn operation" onclick="chooseOperation('subtract')">-</button>
+            <button class="btn" onclick="appendNumber('1')">1</button>
+            <button class="btn" onclick="appendNumber('2')">2</button>
+            <button class="btn" onclick="appendNumber('3')">3</button>
+            <button class="btn operation" onclick="chooseOperation('add')">+</button>
+            <button class="btn" onclick="appendNumber('0')">0</button>
+            <button class="btn" onclick="appendNumber('.')">.</button>
+            <button class="btn equal" onclick="compute()">=</button>
+        </div>
+        <div class="buttons scientific hidden">
+            <button class="btn clear" onclick="clearDisplay()">C</button>
+            <button class="btn" onclick="deleteLast()">DEL</button>
+            <button class="btn" onclick="toggleMode()">Basic</button>
+            <button class="btn operation" onclick="chooseOperation('divide')">/</button>
+            <button class="btn" onclick="appendNumber('7')">7</button>
+            <button class="btn" onclick="appendNumber('8')">8</button>
+            <button class="btn" onclick="appendNumber('9')">9</button>
+            <button class="btn operation" onclick="chooseOperation('multiply')">*</button>
+            <button class="btn" onclick="appendNumber('4')">4</button>
+            <button class="btn" onclick="appendNumber('5')">5</button>
+            <button class="btn" onclick="appendNumber('6')">6</button>
+            <button class="btn operation" onclick="chooseOperation('subtract')">-</button>
+            <button class="btn" onclick="appendNumber('1')">1</button>
+            <button class="btn" onclick="appendNumber('2')">2</button>
+            <button class="btn" onclick="appendNumber('3')">3</button>
+            <button class="btn operation" onclick="chooseOperation('add')">+</button>
+            <button class="btn" onclick="appendNumber('0')">0</button>
+            <button class="btn" onclick="appendNumber('.')">.</button>
+            <button class="btn equal" onclick="compute()">=</button>
+            <button class="btn operation" onclick="chooseOperation('sin')">sin</button>
+            <button class="btn operation" onclick="chooseOperation('cos')">cos</button>
+            <button class="btn operation" onclick="chooseOperation('tan')">tan</button>
+            <button class="btn operation" onclick="chooseOperation('log')">log</button>
+            <button class="btn operation" onclick="chooseOperation('sqrt')">√</button>
+            <button class="btn operation" onclick="chooseOperation('exp')">exp</button>
+            <button class="btn operation" onclick="chooseOperation('pow')">^</button>
+        </div>
+    </div>
+    <script>
+        let display = document.getElementById('display');
+        let equation = '';
+        let currentOperand = '';
+        let scientificMode = false;
+
+        document.addEventListener('keydown', handleKeyPress);
+
+        function handleKeyPress(event) {
+            const key = event.key;
+            if (!isNaN(key) || key === '.') {
+                appendNumber(key);
+            } else if (key === '+') {
+                chooseOperation('add');
+            } else if (key === '-') {
+                chooseOperation('subtract');
+            } else if (key === '*') {
+                chooseOperation('multiply');
+            } else if (key === '/') {
+                chooseOperation('divide');
+            } else if (key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+                compute();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            }
+        }
+
+        function appendNumber(number) {
+            if (number === '.' && currentOperand.includes('.')) return;
+            currentOperand = currentOperand.toString() + number.toString();
+            equation += number.toString();
+            updateDisplay();
+        }
+
+        function chooseOperation(operation) {
+            if (currentOperand === '' && operation !== 'sqrt' && operation !== 'exp') return;
+            switch (operation) {
+                case 'add':
+                    equation += ' + ';
+                    break;
+                case 'subtract':
+                    equation += ' - ';
+                    break;
+                case 'multiply':
+                    equation += ' * ';
+                    break;
+                case 'divide':
+                    equation += ' / ';
+                    break;
+                case 'sin':
+                    equation = `Math.sin(${currentOperand})`;
+                    currentOperand = '';
+                    break;
+                case 'cos':
+                    equation = `Math.cos(${currentOperand})`;
+                    currentOperand = '';
+                    break;
+                case 'tan':
+                    equation = `Math.tan(${currentOperand})`;
+                    currentOperand = '';
+                    break;
+                case 'log':
+                    equation = `Math.log(${currentOperand})`;
+                    currentOperand = '';
+                    break;
+                case 'sqrt':
+                    equation = `Math.sqrt(${currentOperand})`;
+                    currentOperand = '';
+                    break;
+                case 'exp':
+                    equation = `Math.exp(${currentOperand})`;
+                    currentOperand = '';
+                    break;
+                case 'pow':
+                    equation += ' ** ';
+                    break;
+                default:
+                    return;
+            }
+            updateDisplay();
+        }
+
+        function compute() {
+            try {
+                const result = eval(equation);
+                equation = result.toString();
+                currentOperand = equation;
+            } catch (e) {
+                equation = 'Error';
+                currentOperand = '';
+            }
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            equation = '';
+            currentOperand = '';
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            equation = equation.slice(0, -1);
+            currentOperand = currentOperand.slice(0, -1);
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            display.innerText = equation || '0';
+        }
+
+        function toggleMode() {
+            const basicButtons = document.querySelector('.buttons.basic');
+            const scientificButtons = document.querySelector('.buttons.scientific');
+            basicButtons.classList.toggle('hidden');
+            scientificButtons.classList.toggle('hidden');
+            scientificMode = !scientificMode;
+            clearDisplay();
+        }
+    </script>
+</body>
+</html>
